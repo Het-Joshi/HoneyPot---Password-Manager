@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar-brand">Password Manager</a>
+            <ul class="navbar-nav">
+              <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+              <li class="nav-item"><a href="/upload" class="nav-link">Upload</a></li>
+              <li class="nav-item"><a href="/admin" class="nav-link">Admin</a></li>
+              <li class="nav-item"><a href="/search" class="nav-link">Search</a></li>
+            </ul>
+          </nav>
+    </header>
+    <main>
+        <div class="search-form">
+            <h1>Search Page</h1>
+            <form action="/search" method="POST">
+                <div class="form-group">
+                    <label for="query">Enter search term:</label>
+                    <input type="text" id="query" name="query" required>
+                </div>
+                <button class="btn-submit" type="submit">Search</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+         <p>&copy; 2024 Het Joshi Inc.</p>
+    </footer>
+</body>
+</html>
