@@ -13,18 +13,37 @@ const upload = multer({ dest: "uploads/" });
 // Set up logging
 const logger = winston.createLogger({
   level: "info",
-  format: winston.format.json(),
+  format: winston.format.combine(
+    winston.format.timestamp({
+      format: "YYYY-MM-DD HH:mm:ss", // Format the timestamp
+    }),
+    winston.format.json(),
+  ),
   transports: [
     new winston.transports.File({ filename: "result.log" }),
     new winston.transports.Console(),
   ],
 });
 
-// Request logger
+// Logging
 app.use((req, res, next) => {
-  const ip =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress || req.ip;
-  logger.info(`Request from IP: ${ip} for ${req.url}`);
+  const xForwardedFor = req.headers["x-forwarded-for"];
+  const proxyChain = xForwardedFor
+    ? xForwardedFor.split(",").map((ip) => ip.trim())
+    : [];
+
+  const clientIp =
+    proxyChain.length > 0
+      ? proxyChain[0]i
+      : req.connection.remoteAddress || req.ip;
+
+  logger.info(`Request from IP: ${clientIp} for ${req.url}`);
+
+  // If there are multiple proxies, log the entire chain of proxies
+  if (proxyChain.length > 1) {
+    logger.info(`Proxy chain: ${proxyChain.join(" -> ")}`);
+  }
+
   next();
 });
 
