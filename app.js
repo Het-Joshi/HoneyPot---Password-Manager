@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 
   const clientIp =
     proxyChain.length > 0
-      ? proxyChain[0]i
+      ? proxyChain[0]
       : req.connection.remoteAddress || req.ip;
 
   logger.info(`Request from IP: ${clientIp} for ${req.url}`);
