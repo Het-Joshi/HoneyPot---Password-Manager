@@ -1,29 +1,23 @@
-# Honeypot Password Manager
+
+---
+
+# Honeypot Project
 
 ## Overview
 
-The Honeypot Password Manager is a simulated web application designed to attract and capture malicious activities, especially those targeting password management systems. This project showcases various security traps and logging mechanisms to detect and analyze potential threats. It features a modern UI, basic authentication, file upload capabilities, and simulated API endpoints, all crafted to observe and log suspicious interactions.
-
-The application is meant to be hosted via a tool like Ngrok to expose it to the internet, allowing you to see if hackers or bots are able to discover and interact with the honeypot URL.
+This honeypot is designed to simulate various administrative and system paths to attract and log unauthorized access attempts. It serves different pages based on the requested path, including a login page, server status, API data, and system information. It also logs interactions, including form submissions, to help analyze potential security threats.
 
 ## Features
 
-![image](https://github.com/user-attachments/assets/ff84e104-3b52-4642-9e78-60b97bc5f5d5)
-![image](https://github.com/user-attachments/assets/e0475d54-107f-41ec-ac66-048d73ed2238)
-![image](https://github.com/user-attachments/assets/84451528-ea6e-4559-8cd8-14f3476efe32)
-
-
-
-- **Simulated Login and Admin Panel**: Allows users to attempt login with various credentials and access a simulated admin panel.
-- **File Upload Capability**: Users can upload files, which are logged for analysis.
-- **Search Page**: A dynamic trap designed to simulate SQL injection vulnerabilities.
-- **API Endpoints**: Simulated API endpoints for users and data manipulation.
-- **Logging**: Captures detailed logs of user interactions, including IP addresses, credentials used, and API calls.
+- **Dynamic Paths:** Handles various paths to simulate a real admin dashboard and system status.
+- **Logging:** Logs all interactions, including POST request body data and general access details.
+- **Form Handling:** Includes form logging to capture data submitted through the login form.
+- **Error Handling:** Provides a custom 404 page for unknown paths.
 
 ## Prerequisites
 
-- Node.js and npm installed on your local machine.
-- Ngrok or a similar tunneling tool to expose the application to the internet.
+- Node.js (>= 12.x)
+- npm (Node Package Manager)
 
 ## Installation
 
@@ -40,65 +34,55 @@ The application is meant to be hosted via a tool like Ngrok to expose it to the 
    npm install
    ```
 
-3. **Start the Application**
+3. **Create a `.env` File**
 
-   ```bash
-   node app.js
+   Create a `.env` file in the root directory to define environment variables:
+
+   ```env
+   PORT=3000
+   RESULT_FILE=log.txt
    ```
 
-   The application will be accessible at `http://localhost:3000`.
+   - `PORT`: Port number for the server.
+   - `RESULT_FILE`: File to store log data.
 
-4. **Expose the Application Using Ngrok**
+## Usage of V2
 
-   - Install Ngrok if you haven't already: [Ngrok Installation](https://ngrok.com/download)
-   - Run Ngrok to expose the local server:
+1. **Start the Server**
 
-     ```bash
-     ngrok http 3000
-     ```
+   ```bash
+   npm start
+   ```
 
-   - Ngrok will provide a public URL that you can share or monitor to observe interactions with the honeypot.
+   By default, the server will run on port 3000. You can access it at `http://localhost:3000`.
 
-## Project Structure
+2. **Access the Application**
 
-- **`app.js`**: Main server file where the Express app is configured.
-- **`views/`**: Contains EJS templates for rendering pages.
-  - `index.ejs`: Home page with login form.
-  - `dashboard.ejs`: Dashboard for logged-in users.
-  - `admin.ejs`: Admin login page.
-  - `admin-dashboard.ejs`: Admin dashboard.
-  - `upload.ejs`: File upload page.
-  - `search.ejs`: Dynamic SQL injection trap page.
-- **`public/`**: Directory for static assets (e.g., CSS files).
-- **`styles.css`**: Main stylesheet for styling the application.
+   - **Root Path (`/`)**: Displays `index.ejs`.
+   - **Login Path (`/login`)**: Displays a login form.
+   - **Server Status Path (`/server-status`)**: Displays server status information.
+   - **API Data Path (`/api/v1/data`)**: Shows sample API data.
+   - **Admin Panel Path (`/access`)**: Lists users and system logs.
+   - **Security Alerts Path (`/alerts`)**: Shows security alerts.
+   - **System Info Path (`/config`)**: Displays system information.
+   - **404 Path**: Handles unknown paths.
 
-## Deployment
+## Logging
 
-1. **Run Ngrok to Expose Your Local Server**
+- All incoming requests and their details are logged to the file specified in the `RESULT_FILE` environment variable.
+- Form submissions are logged, including the data entered by users.
+- Also logs IP using the `X-Forwarded-For` header
 
-   - Install Ngrok if you haven't already: [Ngrok Installation](https://ngrok.com/download)
-   - Run Ngrok to expose the local server:
+## Directory Structure
 
-     ```bash
-     ngrok http 3000
-     ```
-
-   - Ngrok will provide a public URL that you can share or monitor.
-
-2. **Other info**
-   - Admin page credentials: `admin` , `password`
-   - Default credentials: Dosent matter. all lead to same dashboard.
-   - Search page will show api urls when attempted to sql inject.
-
-## Security Considerations
-
-- This application is a honeypot and should not be used in a production environment.
-- Ensure proper security measures are taken on the server to avoid real vulnerabilities.
-
-## Contributing
-
-Contributions to this project are welcome. Please open an issue or submit a pull request on GitHub if you have suggestions or improvements.
+- **`views/`**: Contains EJS templates.
+  - `index.ejs`: Template for the root path.
+  - `user.ejs`: Template for dynamic paths and 404 handling.
+- **`public/`**: Contains static files like CSS and JavaScript.
+- **`app.js`**: Main server file.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](LICENSE).
+
+

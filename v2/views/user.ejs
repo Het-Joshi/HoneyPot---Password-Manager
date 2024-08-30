@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Restricted access area. Authorized personnel only.">
+  <meta name="keywords" content="admin, config, login, restricted, dashboard">
+  <title>Restricted Access</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Admin Dashboard</h1>
+      <p>Welcome to the admin panel. Please log in to access sensitive features.</p>
+    </header>
+
+    <% if (path === '/server-status') { %>
+      <section id="server-status">
+        <h2>Server Status</h2>
+        <ul>
+          <li>Uptime: <%= serverStatus.uptime %></li>
+          <li>CPU Usage: <%= serverStatus.cpuUsage %>%</li>
+          <li>Memory Usage: <%= serverStatus.memoryUsage %></li>
+          <li>Disk Space: <%= serverStatus.diskSpace %></li>
+          <li>Connections: <%= serverStatus.connections %></li>
+        </ul>
+      </section>
+    <% } else if (path === '/api/v1/data') { %>
+      <section id="api-data">
+        <h2>API Data</h2>
+        <pre><%= JSON.stringify(apiData, null, 2) %></pre>
+      </section>
+    <% } else if (path === '/access') { %>
+      <section id="admin-panel">
+        <h2>Admin Panel</h2>
+        <h3>Users</h3>
+        <ul>
+          <% if (adminData && adminData.users) { %>
+            <% adminData.users.forEach(user => { %>
+              <li>ID: <%= user.id %>, Username: <%= user.username %>, Role: <%= user.role %></li>
+            <% }) %>
+          <% } %>
+        </ul>
+        <h3>System Logs</h3>
+        <ul>
+          <% if (adminData && adminData.systemLogs) { %>
+            <% adminData.systemLogs.forEach(log => { %>
+              <li><%= log.timestamp %> - <%= log.message %></li>
+            <% }) %>
+          <% } %>
+        </ul>
+      </section>
+    <% } else if (path === '/login') { %>
+      <section id="login-section">
+        <h2>Login</h2>
+        <form id="login-form" data-log="true" action="/login" method="post">
+          <input type="text" id="username" name="username" placeholder="Username" required>
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <button type="submit">Login</button>
+        </form>
+        <div id="login-error" style="display: none; color: red;">Invalid credentials, please try again.</div>
+      </section>
+    <% } else if (path === '/alerts') { %>
+      <section id="alerts-section">
+        <h2>Security Alerts</h2>
+        <div class="alert">
+          <p><strong>Alert:</strong> Unauthorized access attempt detected. Please verify your credentials.</p>
+        </div>
+      </section>
+    <% } else if (path === '/config') { %>
+      <section id="system-info">
+        <h2>System Information</h2>
+        <ul>
+          <li>Server Status: <span id="server-status">Online</span></li>
+          <li>Database Connection: <span id="db-connection">Secure</span></li>
+          <li>Firewall: <span id="firewall">Active</span></li>
+          <li>Last Login: <span id="last-login">10 minutes ago</span></li>
+        </ul>
+      </section>
+    <% } else { %>
+      <section id="trap">
+        <h2>Page Not Found</h2>
+        <p>Sorry, the page you are looking for does not exist.</p>
+      </section>
+    <% } %>
+
+    <script>
+      $(document).ready(function() {
+        $('form[data-log="true"]').on('submit', function(event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          // Extract and log field values
+          let formData = {};
+          $(this).find('input, textarea, select').each(function() {
+            formData[$(this).attr('name')] = $(this).val();
+          });
+
+          // Log form data to the console
+          console.log('Form submission data:', formData);
+
+          // Optionally, submit the form via AJAX
+          // Example: $.post($(this).attr('action'), formData);
+
+          // Show a message or redirect as needed
+          $('#login-error').show(); // Example for login error display
+        });
+      });
+    </script>
+
+  </div>
+</body>
+</html>
